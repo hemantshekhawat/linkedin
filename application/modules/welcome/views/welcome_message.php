@@ -63,17 +63,49 @@
 		-webkit-box-shadow: 0 0 8px #D0D0D0;
 	}
 	</style>
-        <meta name="google-translate-customization" content="2d28d9147164adcc-022411bd493484f0-gd6d08cd95c1693ce-e"></meta>
+        
+        <script src="<?php echo base_url();?>js/jquery-2.0.2.js" type="text/javascript"></script>
+        <script src="<?php echo base_url();?>js/Chart.js" type="text/javascript"></script>
+        <meta name = "viewport" content = "initial-scale = 1, user-scalable = no">
+        <style>
+			canvas{
+			}
+		</style>
+        <script type="text/javascript">
+        
+        $(document).ready(function(){
+                var data = JSON.parse(<?php print_r($this->session->userdata('linkedpala')); ?>);
+                //alert(data);
+                console.log(data.educations.values[0]);
+                var gData=new Array();
+                var color = new Array('#F38630','#E0E4CC');
+                var colorhtml = '';
+                for (var i=0;i<data.educations._total;i++)
+                    { 
+                        
+                            colorhtml += '<li id='+color[i]+'>'+data.educations.values[i].degree+"<span>"+data.educations.values[i].startDate.year+"To"+data.educations.values[i].endDate.year+"</span><span style='width: 40px; height: 15px; background-color:"+color[i]+";display: inline-block;margin-left:10px;'></span></li>";
+
+                        
+                            gData.push({
+					value: data.educations.values[i].endDate.year - data.educations.values[i].startDate.year,
+					color:color[i]
+                                        });
+                    }
+                    
+                var pieData = gData;
+                $("#colorreff").html(colorhtml);
+                        console.log(pieData);
+
+	var myPie = new Chart(document.getElementById("canvas").getContext("2d")).Pie(pieData);
+        });
+        
+    </script>
+
 </head>
 <body>
 
-<div id="container">
+    <div id="container">
 	<h1>Welcome to CodeIgniter!</h1>
-<div id="google_translate_element"></div><script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
-}
-</script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
         
 	<div id="body">
 		<p>The page you are looking at is being generated dynamically by CodeIgniter.</p>
@@ -88,7 +120,15 @@ function googleTranslateElementInit() {
 	</div>
 
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds</p>
-        <?php print_r($linkindata);?>
+        <canvas id="canvas" height="450" width="450"></canvas>
+        <div >
+            <ul id="colorreff">
+            </ul>
+        </div>
+        <div id="link">
+            <?php //echo "<pre>"; print_r($this->session->userdata('linkedpala')); //print_r($linkindata);?>
+            
+        </div>
 </div>
 
 </body>

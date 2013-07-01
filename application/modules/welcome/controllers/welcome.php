@@ -19,12 +19,14 @@ class Welcome extends MX_Controller {
 	 */
         
 	public function index()
-	{
-            $this->load->library('Linkedin');
-            
-            $this->linkedin->init(); 
-            $userLinkeddata = $this->linkedin->get_logged_in_users_profile();
-            $data['linkindata'] = json_decode($userLinkeddata,TRUE);
+	{       
+//            $this->load->library('Linkedin');
+//            
+//            $this->linkedin->init(); 
+//            $userLinkeddata = $this->linkedin->get_logged_in_users_profile();
+//            $data['linkindata'] = json_decode($userLinkeddata,TRUE);
+               $data['linkindata'] = $this->getLinkedinData();
+               $this->session->set_userdata('linkedpala',$data['linkindata']);
             //print_r();
            // $params['x'] = "sfasf";
           //echo  modules::run('module', $params);
@@ -35,8 +37,8 @@ class Welcome extends MX_Controller {
             
             $this->linkedin->init(); 
             $userLinkeddata = $this->linkedin->get_logged_in_users_profile();
-            $data['linkindata'] = json_encode($userLinkeddata);
-            print_r($data['linkindata']);
+           return json_encode($userLinkeddata);
+            
             
         }
 }

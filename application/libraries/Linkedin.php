@@ -788,7 +788,7 @@ class OAuthUtil {
   }
 }
 //require_once("oauth.php");
-define('CALLBACK_URL', base_url().'/index.php/welcome/getLinkedinData?_api=accesstoken');
+define('CALLBACK_URL', base_url().'index.php/welcome/index?_api=accesstoken');
 define('BASE_API_URL', 'https://api.linkedin.com');
 
 define('REQUEST_PATH', '/uas/oauth/requestToken');
