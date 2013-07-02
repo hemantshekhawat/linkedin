@@ -76,14 +76,16 @@
         $(document).ready(function(){
                 var data = JSON.parse(<?php print_r($this->session->userdata('linkedpala')); ?>);
                 //alert(data);
-                console.log(data.educations.values[0]);
+                console.log(data);
                 var gData=new Array();
-                var color = new Array('#F38630','#E0E4CC');
-                var colorhtml = '';
+                var pData=new Array();
+                var color = new Array('#F38630','#E0E4CC','#86B404','#F781F3','#00FFBF');
+                var colorhtml = "<li>"+data.firstName+"&nbsp"+data.lastName+"&nbsp"+data.headline+"</li>";
+                var colorhtml2 = '';
                 for (var i=0;i<data.educations._total;i++)
                     { 
                         
-                            colorhtml += '<li id='+color[i]+'>'+data.educations.values[i].degree+"<span>"+data.educations.values[i].startDate.year+"To"+data.educations.values[i].endDate.year+"</span><span style='width: 40px; height: 15px; background-color:"+color[i]+";display: inline-block;margin-left:10px;'></span></li>";
+                            colorhtml += '<li id='+color[i]+'>'+data.educations.values[i].degree+"&nbsp"+data.educations.values[i].fieldOfStudy+"<span>&nbsp"+data.educations.values[i].startDate.year+"&nbspTo&nbsp"+data.educations.values[i].endDate.year+"&nbsp</span><span style='width: 40px; height: 15px; background-color:"+color[i]+";display: inline-block;margin-left:10px;'></span></li>";
 
                         
                             gData.push({
@@ -91,12 +93,34 @@
 					color:color[i]
                                         });
                     }
+                    for (var i=0;i<data.positions._total;i++)
+                    { 
+                        if(data.positions.values[i].isCurrent == true){
+                            var vdata = (2013 - data.positions.values[i].startDate.year)*12 + (7 - data.positions.values[i].startDate.month); 
+                        
+                        var enddate = 2013;
+                        }else{
+                        var enddate = data.positions.values[i].endDate.year
+                          var vdata = (data.positions.values[i].endDate.year - data.positions.values[i].startDate.year)*12 + (data.positions.values[i].endDate.month - data.positions.values[i].startDate.month) 
+                        }
+                           
+                                        
+                            pData.push({
+					value: vdata,
+					color:color[i]
+                                        });
+                           
+                           
+                            colorhtml2 += '<li id='+color[i]+'>'+data.positions.values[i].company.name+"&nbsp"+data.positions.values[i].company.industry+"<span>&nbsp"+data.positions.values[i].startDate.year+"&nbspTo&nbsp"+enddate+"&nbsp</span><span style='width: 40px; height: 15px; background-color:"+color[i]+";display: inline-block;margin-left:10px;'></span></li>";
+                    }
                     
                 var pieData = gData;
+                var pieData2 = pData;
                 $("#colorreff").html(colorhtml);
-                        console.log(pieData);
+                $("#colorreff2").html(colorhtml2);     
 
 	var myPie = new Chart(document.getElementById("canvas").getContext("2d")).Pie(pieData);
+        var myPie2 = new Chart(document.getElementById("canvas2").getContext("2d")).Pie(pieData2);
         });
         
     </script>
@@ -105,24 +129,15 @@
 <body>
 
     <div id="container">
-	<h1>Welcome to CodeIgniter!</h1>
+	<h1>Welcome to Resume Chart</h1>
         
-	<div id="body">
-		<p>The page you are looking at is being generated dynamically by CodeIgniter.</p>
-
-		<p>If you would like to edit this page you'll find it located at:</p>
-		<code>application/views/welcome_message.php</code>
-
-		<p>The corresponding controller for this page is found at:</p>
-		<code>application/controllers/welcome.php</code>
-
-		<p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="user_guide/">User Guide</a>.</p>
-	</div>
-
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds</p>
-        <canvas id="canvas" height="450" width="450"></canvas>
+        <canvas id="canvas" height="250" width="250"></canvas>
+        <canvas id="canvas2" height="250" width="250"></canvas>
         <div >
             <ul id="colorreff">
+            </ul>
+            <ul id="colorreff2">
             </ul>
         </div>
         <div id="link">
